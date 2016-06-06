@@ -1,0 +1,222 @@
+function notinArray(s,array) {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i] === s) return false;
+    }
+    return true;
+}
+
+;(function(undefined) {
+  'use strict';
+
+  if (typeof sigma === 'undefined')
+    throw 'sigma is not declared';
+
+  // Initialize package:
+  sigma.utils.pkg('sigma.parsers');
+  sigma.utils.pkg('sigma.utils');
+
+  /**
+   * Just an XmlHttpRequest polyfill for different IE versions.
+   *
+   * @return {*} The XHR like object.
+   */
+  sigma.utils.xhr = function() {
+    if (window.XMLHttpRequest)
+      return new XMLHttpRequest();
+
+    var names,
+        i;
+
+    if (window.ActiveXObject) {
+      names = [
+        'Msxml2.XMLHTTP.6.0',
+        'Msxml2.XMLHTTP.3.0',
+        'Msxml2.XMLHTTP',
+        'Microsoft.XMLHTTP'
+      ];
+
+      for (i in names)
+        try {
+          return new ActiveXObject(names[i]);
+        } catch (e) {}
+    }
+
+    return null;
+  };
+
+  /**
+   * This function loads a JSON file and creates a new sigma instance or
+   * updates the gg of a given instance. It is possible to give a callback
+   * that will be executed at the end of the process.
+   *
+   * @param  {string}       url      The URL of the JSON file.
+   * @param  {object|sigma} sig      A sigma configuration object or a sigma
+   *                                 instance.
+   * @param  {?function}    callback Eventually a callback to execute after
+   *                                 having parsed the file. It will be called
+   *                                 with the related sigma instance as
+   *                                 parameter.
+   */
+  sigma.parsers.json = function(url, sig, callback) {
+    var gg,
+        xhr = sigma.utils.xhr();
+    if (!xhr)
+      throw 'XMLHttpRequest not supported, cannot load the file.';
+
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        gg = JSON.parse(xhr.responseText);
+
+        graph.matrix = gg.matrix;
+
+        if (_.contains(Object.keys(gg),'edges')==false) {
+            gg['edges'] = gg.links;
+            delete gg['links'];
+        };
+
+        var nodes = gg['nodes'];
+        var firstnode = nodes[0];
+        var firstkeys = Object.keys(firstnode);
+        if (_.contains(firstkeys,'id')==false) {
+            var cntr=0;
+            _.each(nodes, function(node) {
+                node['id'] = 'n'+cntr;
+                cntr = cntr+1;
+            });
+            //gg.nodes[i]['id']='n'+i;
+        };
+
+        if (_.contains(firstkeys,'x')==false) {
+            var found = '';
+            _.each(firstkeys, function(key) {
+                if(key.toLowerCase().startsWith('x') && _.isNumber(firstnode[key])){
+                    found = key;
+                }
+            });
+            if(found !==''){
+                _.each(nodes, function(node) {
+                    node['x']=node[found];
+                });
+            } else {
+                _.each(nodes, function(node) {
+                    if (_.contains(Object.keys(node),'x')==false) {
+                        node['x']=0;
+                    }
+                });
+
+            }
+        };
+
+
+        if (_.contains(firstkeys,'y')==false) {
+            var found = '';
+            _.each(firstkeys, function(key) {
+                if(key.toLowerCase().startsWith('y') && _.isNumber(firstnode[key])){
+                    found = key;
+                }
+            });
+            if(found !==''){
+                _.each(nodes, function(node) {
+                    node['y']=node[found];
+                });
+
+            } else {
+
+                _.each(nodes, function(node) {
+                    if (_.contains(Object.keys(node),'y')==false) {
+                        node['y']=0;
+                    }
+                });
+            }
+        };
+
+
+        if (_.contains(firstkeys,'label')==false) {
+            _.each(nodes, function(node) {
+                node['label']=node['id'];
+            });
+        };
+
+        gg['nodes'] = nodes;
+
+        if (notinArray('edges',Object.keys(gg))) {
+
+            gg['edges'] = gg.links;
+            delete gg['links'];
+        };
+
+
+        var existingnodeids = _.map(gg.nodes,function(n) {
+            return n.id
+        });
+
+        if(_.contains(Object.keys(gg),'edges')==false){
+            if(_.contains(Object.keys(gg),'links')==true){
+                gg['edges'] = gg.links;
+                delete gg['links'];
+            } else {
+                gg['edges']=[];
+            }
+        }
+        if(!gg['edges']){
+            gg['edges']=[];
+        }
+        if(_.contains(Object.keys(gg),'edges')==true){
+
+            for(var i = 0; i < gg.edges.length; i++) {
+                var keys = Object.keys(gg.edges[i]);
+                if (_.contains(keys,'id')==false)  {
+
+                    gg.edges[i]['id']='mappedId'+i;
+
+                    var src = gg.edges[i]['source'];
+                    if(_.contains(existingnodeids, src)==false){
+                        if(_.contains(existingnodeids,'n'+src)){
+                            gg.edges[i]['source']='n'+gg.edges[i]['source'];
+                        }
+                    }
+
+                    var tgt = gg.edges[i]['target'];
+                    if(_.contains(existingnodeids, tgt)==false){
+                        if(_.contains(existingnodeids,'n'+tgt)){
+                            gg.edges[i]['target']='n'+gg.edges[i]['target'];
+                        }
+                    }
+                    //gg.edges[i]['target']='n'+gg.edges[i]['target'];
+                    gg.edges[i]['size']=1;
+
+                };
+                    //console.dir(nodes[i]['data']);
+            };
+        };
+
+        console.log('got:',gg);
+        // Update the instance's gg:
+        if (sig instanceof sigma) {
+          console.log('clearing the gg');
+
+          sig.graph.clear();
+          sig.graph.read(gg);
+
+        // ...or instantiate sigma if needed:
+        } else if (typeof sig === 'object') {
+          console.log('remaking the gg');
+
+          sig.graph = gg;
+          sig = new sigma(sig);
+
+        // ...or it's finally the callback:
+        } else if (typeof sig === 'function') {
+          callback = sig;
+          sig = null;
+        }
+
+        // Call the callback if specified:
+        if (callback)
+          callback(sig || gg);
+      }
+    };
+    xhr.send();
+  };
+}).call(this);

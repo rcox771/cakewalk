@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>cakewalk</title>
+    <link rel="stylesheet" type="text/css" href="lib/font-awesome4/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/mdl/material.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/materialize/dist/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/cakewalk/cakewalk.css">
+
+    <script src="lib/jquery/1.9.1.min.js"></script>
+    <script src="lib/underscore/underscore.js"></script>
+    <script src="lib/mdl/material.min.js"></script>
+    <script src="lib/materialize/dist/js/materialize.min.js"></script>
+
+    <script src="lib/linkurious.js-develop/src/sigma.core.js"></script>
+    <script src="lib/linkurious.js-develop/src/conrad.js"></script>
+    <script src="lib/linkurious.js-develop/src/utils/sigma.utils.js"></script>
+    <script src="lib/linkurious.js-develop/src/utils/sigma.polyfills.js"></script>
+    <script src="lib/linkurious.js-develop/src/sigma.settings.js"></script>
+    <script src="lib/linkurious.js-develop/src/classes/sigma.classes.dispatcher.js"></script>
+    <script src="lib/linkurious.js-develop/src/classes/sigma.classes.configurable.js"></script>
+    <script src="lib/linkurious.js-develop/src/classes/sigma.classes.graph.js"></script>
+    <script src="lib/linkurious.js-develop/src/classes/sigma.classes.camera.js"></script>
+    <script src="lib/linkurious.js-develop/src/classes/sigma.classes.quad.js"></script>
+    <script src="lib/linkurious.js-develop/src/captors/sigma.captors.mouse.js"></script>
+    <script src="lib/linkurious.js-develop/src/captors/sigma.captors.touch.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/sigma.renderers.canvas.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/sigma.renderers.webgl.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/sigma.renderers.svg.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/sigma.renderers.def.js"></script>
+    <script src="lib/mustache/mustache.min.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/webgl/sigma.webgl.nodes.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/webgl/sigma.webgl.nodes.fast.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/webgl/sigma.webgl.edges.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/webgl/sigma.webgl.edges.fast.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/webgl/sigma.webgl.edges.arrow.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.labels.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.hovers.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.nodes.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.edges.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.edges.curve.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.edges.arrow.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.edges.curvedArrow.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.edgehovers.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.edgehovers.curve.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.edgehovers.arrow.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/canvas/sigma.canvas.extremities.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/svg/sigma.svg.utils.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/svg/sigma.svg.nodes.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/svg/sigma.svg.edges.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/svg/sigma.svg.edges.curve.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/svg/sigma.svg.labels.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/renderers/svg/sigma.svg.hovers.def.js"></script>
+    <script src="lib/linkurious.js-develop/src/middlewares/sigma.middlewares.rescale.js"></script>
+    <script src="lib/linkurious.js-develop/src/middlewares/sigma.middlewares.copy.js"></script>
+    <script src="lib/linkurious.js-develop/src/misc/sigma.misc.animation.js"></script>
+    <script src="lib/linkurious.js-develop/src/misc/sigma.misc.bindEvents.js"></script>
+    <script src="lib/linkurious.js-develop/src/misc/sigma.misc.bindDOMEvents.js"></script>
+    <script src="lib/linkurious.js-develop/src/misc/sigma.misc.drawHovers.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.filter/sigma.plugins.filter.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.halo/settings.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.halo/sigma.renderers.halo.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.dragNodes/sigma.plugins.dragNodes.js"></script>
+
+    <script src="lib/linkurious.js-develop/plugins/sigma.helpers.graph/sigma.helpers.graph.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.keyboard/sigma.plugins.keyboard.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.activeState/sigma.plugins.activeState.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.select/sigma.plugins.select.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.lasso/sigma.plugins.lasso.js"></script>
+
+
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.tooltips/sigma.plugins.tooltips.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/settings.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.labels.def.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.hovers.def.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.nodes.def.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.nodes.cross.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.nodes.diamond.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.nodes.equilateral.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.nodes.square.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.nodes.star.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.edges.def.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.edges.curve.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.edges.arrow.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.linkurious/canvas/sigma.canvas.edges.curvedArrow.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edgehovers.dashed.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edges.dotted.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edges.tapered.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.locate/sigma.plugins.locate.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.exporters.spreadsheet/sigma.exporters.spreadsheet.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.colorbrewer/sigma.plugins.colorbrewer.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.neighborhoods/sigma.plugins.neighborhoods.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.design/sigma.plugins.design.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.layouts.dagre/sigma.layout.dagre.js"></script>
+    <script src="lib/linkurious.js-develop/dist/plugins/sigma.layout.forceAtlas2.min.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.layout.forceAtlas2/worker.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.layout.forceAtlas2/supervisor.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.animate/sigma.plugins.animate.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.layouts.forceLink/worker.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.layouts.forceLink/supervisor.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.fullScreen/sigma.plugins.fullScreen.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.legend/settings.js"></script>
+    <script src="lib/linkurious.js-develop/plugins/sigma.plugins.legend/sigma.plugins.legend.js"></script>
+    <script src="lib/tsnejs/tsne.js"></script>
+
+
+
+    <link rel="stylesheet" type="text/css" href="lib/materialize/extras/noUiSlider/nouislider.css">
+    <script src="lib/materialize/extras/noUiSlider/nouislider.js"></script>
+
+    <script src="lib/knockout/knockout.js"></script>
+    <script src="lib/d3/3.4.6/d3.min.js"></script>
+    <script src="lib/d3/d3-cloud-1.0.5/d3.layout.cloud.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/c3-master/c3.css">
+    <script src="lib/c3-master/c3.min.js"></script>
+    <script src="lib/cakewalk/cakewalk.sigma.parsers.json.js"></script>
+
+    <script src="lib/cakewalk/cw2.js"></script>
+
+</head>
+<body>
+
+<!-- templates -->
+<script type="text/html" id="sidebar-button">
+    <i class="fa fa-bars"></i>
+</script>
+
+<script type="text/html" id="queryid">
+    <div class="row">
+        <div class="col s12 m6">
+            <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                    <span class="card-title">Card Title</span>
+                    <p>this is a card</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/html" id="option_groups">
+    <label data-bind="text: label"></label>
+    <div class="col s12">
+        <select data-bind="foreach: groups, value: selectedOption">
+            <optgroup data-bind="attr: {label: label}, foreach: children">
+                <option data-bind="text: label, option: $data, value: $data"></option>
+            </optgroup>
+        </select>
+    </div>
+</script>
+
+<script type="text/html" id="progress-unk">
+    <div class="indeterminate"></div>
+</script>
+
+<script type="text/html" id="progress-complete">
+    <div class="hidethis"></div>
+    </div>
+</script>
+
+    <div class="row">
+            <div class="col s2">
+                <!-- Nodes panel -->
+                <ul id='accordion1' class="collapsible accordion" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header">
+
+
+                            <i class="fa fa-chevron-right">
+                                </i>Nodes
+                            <span class="badge" data-bind="text: totalNodes"></span>
+
+                        </div>
+
+                        <div class="collapsible-body">
+                            <ul class="collapsible" data-collapsible="expandable">
+                                <li class="bold no-padding">
+                                    <div class="collapsible-header"><i class="fa fa-chevron-right"></i>Info</div>
+                                    <div class="collapsible-body">
+                                        <p data-bind="text: nodeInformation()">
+                                        </p>
+                                        <div class="row" data-bind="visible: hasPlottables">
+                                            <div id="plottables" >
+                                                <div class="input-field col s12">
+                                                        <select id="att_dd" data-bind="foreach: groups, value: selectedOption">
+                                                            <optgroup data-bind="attr: {label: label}, foreach: children">
+                                                                <option data-bind="text: label, option: $data, value: $data"></option>
+                                                            </optgroup>
+
+                                                        </select>
+                                                    <label for="att_dd">Plot</label>
+                                                </div>
+                                                <div class="row" data-bind="visible: chartVisible">
+                                                    <div class="container" id="chart"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+
+
+                                <!-- ko foreach: nodestylewidgets -->
+                                <li>
+                                    <div class="collapsible-header"><i class="fa fa-chevron-right"></i>
+                                        <span data-bind="text: title"></span>
+                                    </div>
+                                    <div class="collapsible-body" data-bind="foreach: controls">
+                                        <div class="row" data-bind="template: {name: control_type}">
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- /ko -->
+
+                            </ul>
+
+
+
+
+                        </div>
+                    </li>
+
+                </ul>
+
+                <ul class="collapsible" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header"><i class="fa fa-chevron-right"></i>Edges
+                            <span class="badge" data-bind="text: totalEdges"></span>
+                        </div>
+
+                        <div class="collapsible-body">
+                            <ul class="collapsible" data-collapsible="expandable">
+                                
+
+                                <!-- ko foreach: edgestylewidgets -->
+                                <li>
+                                    <div class="collapsible-header"><i class="fa fa-chevron-right"></i>
+                                        <span data-bind="text: title"></span>
+                                    </div>
+                                    <div class="collapsible-body" data-bind="foreach: controls">
+
+
+                                        <div class="row" data-bind="template: {name: control_type}">
+
+                                        </div>
+
+                                    </div>
+                                </li>
+
+                                <!-- /ko -->
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="col s8">
+
+                <div class="progress" id="progressbar" data-bind="template: {name: loadingStatus}">
+                </div>
+
+                <div class="col s12">
+                    <form>
+
+                        <div class="row">
+                            <div class="col s1">
+                                <button data-bind="click: toggleLasso" class="modal-action modal-close waves-effect waves-green btn-flat">
+                                    <img class="bk-btn-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAGlSURBVDiNldNNiM1hFMfxz/3PHQqxoCgWYmNDk0jyUqwsuP/719xnPVkQStl4mYWpsVXKQkYpL1m4qWmyYElZkDLKyiSbkdKYNBovo8m1uM+d/nPd/2TO6nn5nW+/c57zlCwQ9eGRBPuwF7uxAUswjme4V6tWxqFUAFiLXlSxDaswiz9RkqAL79Ffq1YeldoAXTiNs9iIn3iN0Zj0OULWYycORU1fKQdZh5s4ggncxX28DVk6W+D8MG5hrJQr5Ql68AADIUvfFTZvPuw5VpZjOVcjZCBk6eD/ACJkF7ZgMMEJVHB7kZDNeIhXGEpwEg3cWASkFy9i3vFatTJTxvJ4sAcvo3ANpkOW/sold+MgTsUKRlGbm6P68Mh59GvOSR2/cVTzqYfifisOYDtm4vmlkKVTjUZDC5TgIi5gBX7gG7qxVHNuluEjHuN6yNI3LadzoJz1HejDMXzP3X2Njp+GLJ1o79c/oBzwGgK+YHV0cyVk6eV27YKgCNuEKZzBubjeH7J0rAiUdAKFLP0QsnQSdzCp+Wl7Omlb0RGUi0+YRlmz+YXxF2YZkqkolYwKAAAAAElFTkSuQmCC">
+                                </button>
+                            </div>
+
+                            <div class="col s2">
+
+
+                                <select data-bind="foreach: groups, value: selectedOption2">
+                                    <optgroup data-bind="attr: {label: label}, foreach: children">
+                                        <option data-bind="text: label, option: $data, value: $data"></option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <div class="input-field col s5">
+
+                                <input id="search" data-bind="value: queryString, valueUpdate: 'afterkeydown'" type="search">
+                                <label for="search">
+                                    <i class="fa fa-search"></i>
+                                </label>
+
+                                <i class="material-icons fa fa-times pull-right" data-bind="click: clearHovers"><span id="searchbarhelper" class="badge" data-bind="text: searchCount, visible: queryReady"></span></i>
+
+
+
+
+                            </div>
+
+                            <div class="col s4" id="testdiv">
+
+                                    <a type="submit" class="waves-effect waves-light btn"  data-bind="visible: hadQueryResults, click: addHoveredtoSelection">select+</a>
+
+
+                                    <a class="waves-effect waves-light btn red lighten-1"  data-bind="visible: hasSelected, click: clearSelectedNodes">clear</a>
+
+
+                            </div>
+
+
+                        </div>
+                    </form>
+                </div>
+
+
+
+                <div id="graph-box">
+                </div>
+
+
+
+
+
+            </div>
+
+
+            <script type="text/html" id="dropdown">
+                <label data-bind="text:label"></label>
+                <select data-bind="foreach: options, value: selectedOption">
+                    <option data-bind="text: label, option: $data, value: $data"></option>
+                </select>
+            </script>
+
+
+
+
+
+            <script type="text/html" id="radio_group">
+                <label data-bind="text:label"></label>
+                <form action="#">
+                    <div class="input-field">
+
+
+
+                    <!-- ko foreach: options -->
+                        <p>
+                            <a href='#!' type="radio"/>
+                            <label data-bind="text: $data"></label>
+                        </p>
+                    <!-- /ko -->
+
+                    </div>
+                </form>
+            </script>
+
+
+
+
+            <script type="text/html" id="checkbox">
+                <label data-bind="text:label"></label>
+                <select data-bind="foreach: options, value: selectedOption">
+                    <option data-bind="text: label, option: $data, value: $data"></option>
+                </select>
+            </script>
+
+            <script type="text/html" id="fileinput">
+                <form action="#" >
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span data-bind="text: label"></span>
+                            <input type="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path" type="text" data-bind="change: upload, value: filepath">
+                        </div>
+                    </div>
+                </form>
+            </script>
+
+
+            <script type="text/html" id="textinput">
+
+                <div class="input-field" data-bind="visible: show">
+                    <label data-bind="text:label"></label>
+                    <!--<input type="text" data-bind="value: textvalue, valueUpdate: 'afterkeydown', change: test()" />-->
+                    <input type="text" data-bind="value: textvalue" />
+                </div>
+            </script>
+
+            <script type="text/html" id="switch">
+                <div class="switch">
+                    <label>
+                        test
+                        <input type="checkbox" data-bind="checked: state">
+                        <span class="lever"></span>
+                    </label>
+                </div>
+            </script>
+
+            <script type="text/html" id="orderer">
+                <div class="switch">
+                    <label>
+                        invert order
+                        <input type="checkbox" data-bind="checked: state">
+                        <span class="lever"></span>
+
+                    </label>
+                </div>
+            </script>
+
+            <script type="text/html" id="button">
+                <a class="waves-effect waves-light btn" style="margin:10px" data-bind="click: callback, text:label"></a>
+            </script>
+
+            <script type="text/html" id="slider" >
+                    <div data-bind="visible: show">
+                        <label data-bind="text:label"></label>
+                        <div data-bind="sliderko: spent, value: minmax, set:callbackchange(), change: callbackchange(), update: callbackchange(), sliderOptions: options()"></div>
+                    </div>
+                <!--<div data-bind="value: minmax, change: alert('blah'), sliderOptions: options()"></div>-->
+            </script>
+
+            <script type="text/html" id="accordion_widget">
+                <li>
+                    <div class="collapsible-header"><i class="fa fa-chevron-right"></i>
+                        <span data-bind="text: title"></span>
+                    </div>
+                    <div class="collapsible-body">
+                        <ul class="collapsible" data-collapsible="expandable" data-bind="foreach: sub_accordion_widgets">
+                            <li>
+                                <div class="collapsible-header"><i class="fa fa-chevron-right"></i>
+                                    <span data-bind="text: title"></span>
+                                </div>
+                                <div class="collapsible-body" data-bind="foreach: controls">
+
+
+                                    <div class="row" data-bind="template: {name: control_type}">
+
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </script>
+
+
+
+            <div id="modal1" class="modal" data-bind="if: displayPopup">
+                <div class="modal-content">
+                    <h4 data-bind="text: popupheader"></h4>
+
+                    <form class="col s12">
+                        <!-- ko foreach: popupcontrols -->
+                        <div class="row" data-bind="template: {name: control_type}"></div>
+                        <!-- /ko -->
+
+
+                    </form>
+                    <div class="modal-footer">
+                        <button class="modal-action modal-close btn-flat">Cancel</button>
+                        <button data-bind="click: popupAccepted" class="modal-action modal-close waves-effect waves-green btn-flat">Accept</button>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div id="modal2" class="modal" data-bind="with: currentFilter">
+                <div class="modal-content">
+                    <h4 data-bind="text: filtername"></h4>
+
+                    <form class="col s12">
+                        <!-- ko foreach: controls -->
+                        <div class="row" data-bind="template: {name: control_type}"></div>
+                        <!-- /ko -->
+                    </form>
+
+                    <div class="modal-footer">
+                        <button class="modal-action modal-close btn-flat">Cancel</button>
+                        <!--<button data-bind="click: popupAccepted" class="modal-action modal-close waves-effect waves-green btn-flat">Accept</button>-->
+                        <button data-bind="click: acceptFilter" class="modal-action modal-close waves-effect waves-green btn-flat">Accept</button>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="col s2">
+
+                <!--Filter Groups panel -->
+                <ul class="collapsible" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header"><i class="fa fa-chevron-right"></i>Filters
+                        </div>
+                        <span>
+                            <button class="waves-effect waves-light btn green" data-bind="click: showFilter">add</button>
+                            <a class="waves-effect waves-light btn red"  data-bind="click: removeLastFilter">remove</a>
+                        </span>
+
+                        </form>
+
+                        <div class="collapsible-body">
+                            <ul class="collapsible" data-collapsible="expandable" >
+                                <div class="row filter-body" id="filter-panel">
+
+
+                                    <!-- ko foreach: filterwidgets -->
+                                    <form class="col s12 filter-row">
+
+                                        <div class="input-field col s4">
+                                            <a data-bind="click: edit" class="waves-effect waves-light btn blue"><i class="fa fa-icon fa-pencil"></i></a>
+                                        </div>
+
+                                        <div class="input-field col s6">
+                                            <input data-bind="value: filtername, valueUpdate: 'afterkeydown'" type="text">
+                                        </div>
+
+                                        <div class="input-field col s2">
+                                            <a class="waves-effect waves-light btn red" data-bind="click: remove"><i class="fa fa-icon fa-times"></i></a>
+                                        </div>
+
+
+                                    </form>
+                                    <!-- /ko -->
+                                </div>
+
+
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+
+
+
+
+
+                <!-- Settings panel -->
+                <ul class="collapsible" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header"><i class="fa fa-chevron-right"></i>Settings
+
+                        </div>
+
+                        <div class="collapsible-body">
+                            <ul class="collapsible" data-collapsible="expandable">
+
+
+                                <!-- ko foreach: settingswidgets -->
+                                <li>
+                                    <div class="collapsible-header"><i class="fa fa-chevron-right"></i>
+                                        <span data-bind="text: title"></span>
+                                    </div>
+                                    <div class="collapsible-body" data-bind="foreach: controls">
+
+
+                                        <div class="row" data-bind="template: {name: control_type}">
+
+                                        </div>
+
+                                    </div>
+                                </li>
+
+                                <!-- /ko -->
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+
+renderer_config = {
+    renderer: {
+        container: document.getElementById('graph-box'),
+        type: 'canvas'
+    },
+    settings: {
+        animationsTime: 1500,
+        drawLabels: false,
+        defaultedgeColor: "#CCC",
+        scalingMode: 'inside',
+        batchEdgesDrawing: true,
+        drawEdges:true,
+        minEdgeSize: 0.1,
+        maxEdgeSize: 1,
+        hideEdgesOnMove: true,
+	enableEdgeHovering: false,
+    	borderSize: 2,
+    	outerBorderSize: 1,
+    	defaultNodeBorderColor: '#fff',
+    	defaultNodeOuterBorderColor: 'rgb(236, 81, 72)',
+    	nodeHaloColor: 'rgba(236, 81, 72, 0.2)',
+    	nodeHaloSize: 5,
+    	nodeActiveLevel: 3,
+    	legendTitleFontSize:25,
+        legendFontSize:20,
+    	legendWidth:300
+    }
+}
+
+
+var graph = new CakeGraph(renderer_config);
+graph.loadingStatus('progress-complete');
+
+$(document).ready(function() {
+    if (document.fonts) {
+    var fontsReady = document.fonts.ready;
+    if (typeof(fontsReady) == "function") {
+        fontsReady = document.fonts.ready();
+    }
+
+    /*
+    fontsReady.then(graph.read_json(jsonfile));
+    } else {
+    setTimeout(graph.read_json(jsonfile), 2000);
+    */
+
+}
+
+    ko.applyBindings(graph);
+
+    $('.button-collapse').sideNav({
+        menuWidth: 300,
+        edge: 'left', 
+        closeOnClick: true
+    });
+
+    $('select').material_select();
+
+    var widgets = [
+                    {
+                        'parent': "nodestylewidgets",
+                        'title': 'labels',
+                        'controls': [
+                            {'label': 'label nodes by',
+                            'options': graph.nodeUncat,
+                            'type': 'dropdown',
+                            'callback': graph.nodelabeldefault
+                            },
+                            {'label': 'draw labels',
+                            'options': [false, true],
+                            'type': 'dropdown',
+                            'callback': graph.drawlabels
+                            }
+
+
+                        ]
+                    },
+
+
+                    {
+                        'parent': "nodestylewidgets",
+                        'title': 'colors',
+                        'controls': [
+                            {'label': 'assign colors by',
+                            'options': ['numeric'],
+                            'type': 'option_groups',
+                            'callback': graph.nodecolorby
+                            },
+                            {'label': 'selected colormap',
+                            'options': graph.colormaps.sort(),
+                            'type': 'dropdown',
+                            'callback': graph.nodecolormap
+                            },
+                            {'label': 'bins',
+                            'options': {
+                                'start': 3,
+                                //'connect': true,
+                                'step': 1,
+                                'range': {
+                                    'min': 3,
+                                    'max':12
+                                }
+                            },
+                            'type': 'slider',
+                            'callback': graph.nodecolorbins
+                            }
+                        ]
+                    },
+                    {
+                        'parent': "nodestylewidgets",
+                        'title': 'sizes',
+                        'controls': [
+                            {'label': 'assign sizes by',
+                            'options': ['numeric'],
+                            'type': 'option_groups',
+                            'callback': graph.nodesizeby
+                            },
+                            {'label': 'order',
+                            'type': 'orderer',
+                            'callback': graph.sizeorder
+                            },
+
+
+                            {'label': 'bins',
+                            'options': {
+                                'start': 3,
+                                //'connect': true,
+                                'step': 1,
+                                'range': {
+                                    'min': 3,
+                                    'max':20
+                                }
+                            },
+                            'type': 'slider',
+                            'callback': graph.nodesizebins
+                            }
+
+
+                        ]
+                    },
+                    {
+                        'parent': "nodestylewidgets",
+                        'title': 'shapes',
+                        'controls': [
+                            {'label': 'default node shape',
+                            'options': ['circle','square','cross','equilateral','diamond','star'],
+                            'type': 'dropdown',
+                            'callback': graph.nodeshapedefault
+                            }
+                        ]
+                    },
+                    {
+                        'parent': "edgestylewidgets",
+                        'title': 'colors',
+                        'controls': [
+                            {'label': 'default edge color',
+                            'options': ['source', 'target','invisible','default'],
+                            'type': 'dropdown',
+                            'callback': graph.edgecolordefault
+                            }
+                        ]
+                    },
+
+                    {
+                        'parent': "edgestylewidgets",
+                        'title': 'shapes',
+                        'controls': [
+                            {'label': 'default node shape',
+                            'options': ['line','arrow','curve','curvedArrow','tapered','dashed','dotted','parallel'],
+                            'type': 'dropdown',
+                            'callback': graph.edgeshapedefault
+                            }
+                        ]
+                    },
+
+                    {
+                        'parent': "settingswidgets",
+                        'title': 'Layout',
+                        'controls': [
+                            {'label': 'Layout Choice',
+                            'options': ['forceLink','concentric','circular','random', 'tsne'],
+                            'type': 'dropdown',
+                            'callback': graph.layout
+                            },
+                            {'label': 'Refresh',
+                            'type': 'button',
+                            'callback': graph.reset_layout
+                            }
+
+                        ]
+                    },
+
+                    {
+                        'parent': "settingswidgets",
+                        'title': 'Import/Export',
+                        'controls': [
+                            {'label': 'import json',
+                            'type': 'fileinput',
+                            'callback': graph.read_json
+                            },
+                            {'label': 'Export',
+                            'type': 'dropdown',
+                            'options': ['nodes','edges'],
+                            'callback': graph.exportwhat
+                            },
+                            {'label': 'Which',
+                            'type': 'dropdown',
+                            'options': ['all','selected'],
+                            'callback':graph.exportwhich
+                            },
+                            {'label': 'csv',
+                            'type': 'button',
+                            'callback': graph.to_csv
+                            }
+                            /*,
+                            {'label': 'clipboard',
+                            'type':'button',
+                            'callback': graph.to_clipboard
+                            }*/
+
+
+                        ]
+                    }
+
+
+    ];
+
+    graph.load_widgets(widgets);
+
+    $('.collapsible-header').on('click', function(e){
+        icon = $(e.currentTarget).find('i')[0];
+        $(icon).toggleClass('rotate rotate2');
+    });
+});
+
+
+</script>
+</html>
